@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Stock;
 using api.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -18,12 +20,18 @@ namespace api.Controllers
         {
             _context = context;
         }
-        [HttpGet]
-        public IActionResult GetAll()
+        [HttpGet("get_all")]
+        public JsonResult GetAll()
         {
             var stock = _context.Stock.ToList().Select(x => x.ToStockDto());
 
-            return Ok(stock);
+            return new JsonResult(stock);
+        }
+
+        [HttpGet]
+        public string getalldata()
+        {
+            return "stockString";
         }
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute]int id)
@@ -37,7 +45,7 @@ namespace api.Controllers
             return Ok(stock.ToStockDto());
         }
 
-        [HttpPost]
+        [HttpPost("post_data")]
         public IActionResult Create([FromBody] CreateStockRequestDto stockDto)
         {
             var stockModel = stockDto.ToStockFromCreateDTO();
