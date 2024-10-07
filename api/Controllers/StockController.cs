@@ -60,5 +60,19 @@ namespace api.Controllers
             return BadRequest("No data");
         }
 
+        [HttpDelete("delete_data")]
+        public IActionResult Delete([FromForm]int id)
+        {
+            var stockDelete = _context.Stock.Single(x => x.Id == id);
+            if(stockDelete != null)
+            {
+                _context.Stock.Remove(stockDelete);
+                _context.SaveChanges();
+                return Ok("Success Delete");
+            }
+            
+            return BadRequest("No data");
+        }
+
     }
 }
