@@ -46,12 +46,19 @@ namespace api.Controllers
         }
 
         [HttpPost("post_data")]
-        public IActionResult Create([FromBody] CreateStockRequestDto stockDto)
+        public IActionResult Create([FromForm] CreateStockRequestDto stockDto)
         {
+            
             var stockModel = stockDto.ToStockFromCreateDTO();
-            _context.Stock.Add(stockModel);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new{id = stockModel.Id}, stockModel.ToStockDto());
+            if(stockModel != null)
+            {
+                _context.Stock.Add(stockModel);
+                _context.SaveChanges();
+                return Ok("Data successfully added");
+            }
+            
+            return BadRequest("No data");
         }
+
     }
 }
