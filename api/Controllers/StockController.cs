@@ -33,8 +33,8 @@ namespace api.Controllers
         {
             return "stockString";
         }
-        [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute]int id)
+        [HttpGet("get_data")]
+        public IActionResult GetById([FromForm]int id)
         {
             var stock = _context.Stock.Find(id);
 
@@ -45,6 +45,11 @@ namespace api.Controllers
             return Ok(stock.ToStockDto());
         }
 
+        /// <summary>
+        /// Post data from stockDto data model
+        /// </summary>
+        /// <param name="stockDto"></param>
+        /// <returns></returns>
         [HttpPost("post_data")]
         public IActionResult Create([FromForm] CreateStockRequestDto stockDto)
         {
@@ -60,6 +65,11 @@ namespace api.Controllers
             return BadRequest("No data");
         }
 
+        /// <summary>
+        /// Delete data by {StockId}
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("delete_data")]
         public IActionResult Delete([FromForm]int id)
         {
