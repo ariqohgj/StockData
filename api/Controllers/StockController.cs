@@ -21,18 +21,28 @@ namespace api.Controllers
             _context = context;
         }
         [HttpGet("get_all")]
-        public JsonResult GetAll()
+        public IActionResult GetAll()
         {
             var stock = _context.Stock.ToList().Select(x => x.ToStockDto());
 
+            if(stock is null){
+                return NotFound();
+            }
             return new JsonResult(stock);
         }
 
         [HttpGet]
         public string getalldata()
         {
-            return "stockString";
+           
+            return  @"""Hey Whats up, what are you looking for
+            please try add 
+            /get_data
+            /get_all
+            /post_data
+            /delete_data"""; 
         }
+
         [HttpGet("get_data")]
         public IActionResult GetById([FromForm]int id)
         {
@@ -55,14 +65,16 @@ namespace api.Controllers
         {
             
             var stockModel = stockDto.ToStockFromCreateDTO();
-            if(stockModel != null)
+            if(stockModel == null)
             {
-                _context.Stock.Add(stockModel);
-                _context.SaveChanges();
-                return Ok("Data successfully added");
+                return BadRequest("No data");
+
             }
             
-            return BadRequest("No data");
+            _context.Stock.Add(stockModel);
+            _context.SaveChanges();
+            return Ok("Data successfully added");
+
         }
 
         /// <summary>
@@ -74,15 +86,15 @@ namespace api.Controllers
         public IActionResult Delete([FromForm]int id)
         {
             var stockDelete = _context.Stock.Single(x => x.Id == id);
-            if(stockDelete != null)
+            if(stockDelete == null)
             {
-                _context.Stock.Remove(stockDelete);
-                _context.SaveChanges();
-                return Ok("Success Delete");
-            }
-            
-            return BadRequest("No data");
-        }
+                return BadRequest("No data");
 
+            }
+
+            _context.Stock.Remove(stockDelete);
+            _context.SaveChanges();
+            return Ok("Success Delete");
+        }
     }
 }
