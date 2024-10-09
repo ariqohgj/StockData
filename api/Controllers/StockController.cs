@@ -41,6 +41,7 @@ namespace api.Controllers
             /get_all
             /post_data
             /delete_data"""; 
+            
         }
 
         [HttpGet("get_data")]
