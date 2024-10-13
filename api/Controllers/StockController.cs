@@ -8,6 +8,7 @@ using api.Dtos.Stock;
 using api.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -21,14 +22,15 @@ namespace api.Controllers
             _context = context;
         }
         [HttpGet("get_all")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var stock = _context.Stock.ToList().Select(x => x.ToStockDto());
+            var stock = await _context.Stock.ToListAsync();
+            var stockDto = stock.Select(x => x.ToStockDto());
 
-            if(stock is null){
+            if(stockDto is null){
                 return NotFound();
             }
-            return new JsonResult(stock);
+            return new JsonResult(stockDto);
         }
 
         [HttpGet]
@@ -45,9 +47,9 @@ namespace api.Controllers
         }
 
         [HttpGet("get_data")]
-        public IActionResult GetById([FromForm]int id)
+        public async Task<IActionResult> GetById([FromForm]int id)
         {
-            var stock = _context.Stock.Find(id);
+            var stock = await _context.Stock.FindAsync(id);
 
             if(stock == null){
                 return NotFound();
@@ -62,7 +64,7 @@ namespace api.Controllers
         /// <param name="stockDto"></param>
         /// <returns></returns>
         [HttpPost("post_data")]
-        public IActionResult Create([FromForm] CreateStockRequestDto stockDto)
+        public async Task<IActionResult> Create([FromForm] CreateStockRequestDto stockDto)
         {
             
             var stockModel = stockDto.ToStockFromCreateDTO();
@@ -72,8 +74,8 @@ namespace api.Controllers
 
             }
             
-            _context.Stock.Add(stockModel);
-            _context.SaveChanges();
+            await _context.Stock.AddAsync(stockModel);
+            await _context.SaveChangesAsync();
             return Ok("Data successfully added");
 
         }
@@ -84,9 +86,9 @@ namespace api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("delete_data")]
-        public IActionResult Delete([FromForm]int id)
+        public async Task<IActionResult> Delete([FromForm]int id)
         {
-            var stockDelete = _context.Stock.Single(x => x.Id == id);
+            var stockDelete = await _context.Stock.SingleAsync(x => x.Id == id);
             if(stockDelete == null)
             {
                 return BadRequest("No data");
@@ -94,8 +96,30 @@ namespace api.Controllers
             }
 
             _context.Stock.Remove(stockDelete);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok("Success Delete");
+        }
+
+        [HttpPut("update_data")]
+        public async Task<IActionResult> Update([FromForm]int id, [FromForm] UpdateStockRequestDto updateStockDto)
+        {
+            var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+
+            if(stockModel == null)
+            {
+                return NotFound();
+            }
+            
+            stockModel.Symbol = updateStockDto.Symbol;
+            stockModel.Company = updateStockDto.Company;
+            stockModel.Purchase = updateStockDto.Purchase;
+            stockModel.LastDiv = updateStockDto.LastDiv;
+            stockModel.Industry = updateStockDto.Industry;
+            stockModel.MarketCap = updateStockDto.MarketCap;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(stockModel.ToStockDto());
         }
     }
 }
