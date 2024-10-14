@@ -12,5 +12,6 @@ namespace api.Interfaces
         Task<List<Stock>> GetAllAsync();
         ValueTask<Stock?> FindByIdAsync(int id);
         ValueTask<EntityEntry<Stock>> AddStockAsync(Stock stock);
+        Task<Stock> FindSingleAsync(int id);
     }
 }

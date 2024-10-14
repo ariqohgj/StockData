@@ -91,7 +91,7 @@ namespace api.Controllers
         [HttpDelete("delete_data")]
         public async Task<IActionResult> Delete([FromForm]int id)
         {
-            var stockDelete = await _context.Stock.SingleAsync(x => x.Id == id);
+            var stockDelete = await _stockRepo.FindSingleAsync(id);
             if(stockDelete == null)
             {
                 return BadRequest("No data");

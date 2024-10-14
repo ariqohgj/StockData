@@ -19,6 +19,11 @@ namespace api.Repository
             _context = context;
         }
 
+        public Task<Stock> FindSingleAsync(int id)
+        {
+            return _context.Stock.SingleAsync(x => x.Id == id);
+        }
+
         public ValueTask<Stock?> FindByIdAsync(int id)
         {
 
