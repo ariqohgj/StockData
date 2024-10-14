@@ -50,9 +50,9 @@ namespace api.Controllers
         }
 
         [HttpGet("get_data")]
-        public async Task<IActionResult> GetById([FromForm]int id)
+        public async Task<IActionResult> GetById([FromQuery]int id)
         {
-            var stock = await _context.Stock.FindAsync(id);
+            var stock = await _stockRepo.FindByIdAsync(id);
 
             if(stock == null){
                 return NotFound();
@@ -77,7 +77,7 @@ namespace api.Controllers
 
             }
             
-            await _context.Stock.AddAsync(stockModel);
+            await _stockRepo.AddStockAsync(stockModel);
             await _context.SaveChangesAsync();
             return Ok("Data successfully added");
 

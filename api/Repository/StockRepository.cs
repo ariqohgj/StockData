@@ -6,6 +6,7 @@ using api.Data;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace api.Repository
 {
@@ -17,9 +18,21 @@ namespace api.Repository
         {
             _context = context;
         }
+
+        public ValueTask<Stock?> FindByIdAsync(int id)
+        {
+
+            return _context.Stock.FindAsync(id);
+        }
+
         public Task<List<Stock>> GetAllAsync()
         {
             return _context.Stock.ToListAsync();
+        }
+
+        ValueTask<EntityEntry<Stock>> IStockRepository.AddStockAsync(Stock stock)
+        {
+            return _context.Stock.AddAsync(stock);
         }
     }
 }
