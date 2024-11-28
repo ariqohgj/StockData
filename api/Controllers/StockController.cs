@@ -50,7 +50,7 @@ namespace api.Controllers
         }
 
         [HttpGet("get_data")]
-        public async Task<IActionResult> GetById([FromForm]int id)
+        public async Task<IActionResult> GetById([FromQuery]int id)
         {
             var stock = await _stockRepo.GetByIdAsync(id);
 
