@@ -50,9 +50,9 @@ namespace api.Controllers
         }
 
         [HttpGet("get_data")]
-        public async Task<IActionResult> GetById([FromForm]int id)
+        public async Task<IActionResult> GetById([FromQuery]int id)
         {
-            var stock = await _context.Stock.FindAsync(id);
+            var stock = await _stockRepo.GetByIdAsync(id);
 
             if(stock == null){
                 return NotFound();
@@ -69,18 +69,17 @@ namespace api.Controllers
         [HttpPost("post_data")]
         public async Task<IActionResult> Create([FromForm] CreateStockRequestDto stockDto)
         {
-            
             var stockModel = stockDto.ToStockFromCreateDTO();
+
             if(stockModel == null)
             {
                 return BadRequest("No data");
 
             }
             
-            await _context.Stock.AddAsync(stockModel);
+            await _stockRepo.CreateAsync(stockModel);
             await _context.SaveChangesAsync();
             return Ok("Data successfully added");
-
         }
 
         /// <summary>
@@ -91,38 +90,27 @@ namespace api.Controllers
         [HttpDelete("delete_data")]
         public async Task<IActionResult> Delete([FromForm]int id)
         {
-            var stockDelete = await _context.Stock.SingleAsync(x => x.Id == id);
+            var stockDelete = await _stockRepo.DeleteAsync(id);
             if(stockDelete == null)
             {
                 return BadRequest("No data");
 
             }
-
-            _context.Stock.Remove(stockDelete);
-            await _context.SaveChangesAsync();
+            
             return Ok("Success Delete");
         }
 
         [HttpPut("update_data")]
         public async Task<IActionResult> Update([FromForm]int id, [FromForm] UpdateStockRequestDto updateStockDto)
         {
-            var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+            var stockModel = await _stockRepo.UpdateAsync(id, updateStockDto);
 
             if(stockModel == null)
             {
                 return NotFound();
             }
-            
-            stockModel.Symbol = updateStockDto.Symbol;
-            stockModel.Company = updateStockDto.Company;
-            stockModel.Purchase = updateStockDto.Purchase;
-            stockModel.LastDiv = updateStockDto.LastDiv;
-            stockModel.Industry = updateStockDto.Industry;
-            stockModel.MarketCap = updateStockDto.MarketCap;
 
-            await _context.SaveChangesAsync();
-
-            return Ok(stockModel.ToStockDto());
+            return Ok("Success Update Data");
         }
     }
 }
