@@ -152,3 +152,7 @@ D:\Unity Project\DRD\BackendTrainin\api\obj\Debug\net7.0\refint\api.dll
 D:\Unity Project\DRD\BackendTrainin\api\obj\Debug\net7.0\api.pdb
 D:\Unity Project\DRD\BackendTrainin\api\obj\Debug\net7.0\api.genruntimeconfig.cache
 D:\Unity Project\DRD\BackendTrainin\api\obj\Debug\net7.0\ref\api.dll
+C:\DHeeren17\BackendTrainin\api\bin\Debug\net7.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\DHeeren17\BackendTrainin\api\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\DHeeren17\BackendTrainin\api\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\DHeeren17\BackendTrainin\api\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
