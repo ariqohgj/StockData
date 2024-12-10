@@ -99,7 +99,12 @@ namespace api.Controllers
             
             return Ok("Success Delete");
         }
-
+        /// <summary>
+        /// Update data stock 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updateStockDto"></param>
+        /// <returns></returns>
         [HttpPut("update_data")]
         public async Task<IActionResult> Update([FromForm]int id, [FromForm] UpdateStockRequestDto updateStockDto)
         {
